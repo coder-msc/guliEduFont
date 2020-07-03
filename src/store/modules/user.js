@@ -25,7 +25,7 @@ const user = {
   },
 
   actions: {
-    // 登录
+    // 登录1
     Login({ commit }, userInfo) {
       const username = userInfo.username.trim()
       return new Promise((resolve, reject) => {
