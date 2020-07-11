@@ -53,8 +53,6 @@
           // js原生写法: document.getElementById("upload").submit()
           this.$refs.upload.submit()
       },
-
-      //上传成功
       fileUploadSuccess(){
         this.loding=false,
           this.$message({
@@ -64,6 +62,8 @@
         this.$router.push({path:'/subject/list'})
       },
       //上传失败
+      //上传成功
+
       fileUploadError(){
         this.loding=false,
           this.$message({
