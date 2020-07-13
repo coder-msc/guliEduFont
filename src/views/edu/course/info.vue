@@ -111,15 +111,41 @@
         BASE_API: process.env.BASE_API, // 接口API地址
         teacherList:[],
         subjectOneList:[],
-        subjectTwoList:[]
+        subjectTwoList:[],
+        courseId:''
       }
     },
     created() {
-      //初始化所有讲师
-      this.getTeacherList(),
+      if (this.$route.params && this.$route.params.id) {
+        this.courseId = this.$route.params.id
+        this.getCourseInfo()
+      } else {
+        //初始化所有讲师
+        this.getTeacherList(),
         this.getSubjectOne()
+    }
     },
     methods:{
+      //数据回显
+      getCourseInfo(){
+        course.getCourseInfo(this.courseId).then(response=>{
+          this.courseInfo=response.data.courseInfoVo
+          //处理回显后 得一级和二级分类显示问题
+          subject.getSubjectList().then(response=>{
+            this.subjectOneList=response.data.list
+            for(var i=0;i<this.subjectOneList.length;i++) {
+              //获取每个一级分类
+              var oneSubject = this.subjectOneList[i]
+              //比较当前courseInfo里面一级分类id和所有的一级分类id
+              if(this.courseInfo.subjectParentId == oneSubject.id) {
+                //获取一级分类所有的二级分类
+                this.subjectTwoList = oneSubject.children
+              }
+            }
+          })
+          this.getTeacherList()
+        })
+      },
       //封面上传成功
       handleAvatarSuccess(res,file){
           this.courseInfo.cover = res.data.url
