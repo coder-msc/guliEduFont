@@ -9,7 +9,7 @@
       <el-step title="创建课程大纲"/>
       <el-step title="最终发布"/>
     </el-steps>
-
+    <el-button type="text" @click="openChapterDialog()">添加章节</el-button>
     <!-- 章节 -->
     <ul class="chanpterList">
       <li
@@ -47,6 +47,22 @@
       <el-button :disabled="saveBtnDisabled" type="primary" @click="next">下一步</el-button>
     </div>
 
+
+    <!-- 添加和修改章节表单 -->
+    <el-dialog :visible.sync="dialogChapterFormVisible" title="添加章节">
+      <el-form :model="chapter" label-width="120px">
+        <el-form-item label="章节标题">
+          <el-input v-model="chapter.title"/>
+        </el-form-item>
+        <el-form-item label="章节排序">
+          <el-input-number v-model="chapter.sort" :min="0" controls-position="right"/>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogChapterFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="saveOrUpdate">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -56,7 +72,13 @@
       return {
         chapterVideo:[],
         saveBtnDisabled:false,
-        courseId:''
+        courseId:'',
+        dialogChapterFormVisible:false,
+        chapter:{
+          title:'',
+          sort:''
+        }
+
       }
     },
     created() {
@@ -66,6 +88,39 @@
       this.getChapterVideo()
     },
     methods:{
+
+      //添加章节
+      addChapter(){
+        this.chapter.courseId=this.courseId
+        chapter.addChapter(this.chapter).then(response=>{
+          //关闭弹框
+          this.dialogChapterFormVisible=false
+          //提示
+          this.$message({
+            type: 'success',
+            message: '添加章节信息成功!'
+          });
+          //刷新 展示
+          this.getChapterVideo()
+        })
+      },
+      //跟新或者添加
+      saveOrUpdate(){
+       this.addChapter()
+      },
+      openChapterDialog(){
+        this.dialogChapterFormVisible=true
+        this.chapter.title=''
+        this.chapter.sort=0
+      },
+      //上一步
+      previous(){
+        this.$router.push({path:'/course/info/'+this.courseId})
+      },
+      //下一步
+      next(){
+        this.$router.push({path:'/course/publish/'+this.courseId})
+      },
       //根据CourseID 查询章节小节
       getChapterVideo(){
         chapter.getAllChapterVideo(this.courseId).then(response=>{
