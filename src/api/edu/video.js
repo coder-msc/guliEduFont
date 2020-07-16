@@ -12,7 +12,7 @@ export default{
   //修改得查询一条
   getVideo(videoId){
     return request({
-      url:`/eduservice/video/${videoId}`,
+      url:`/eduservice/video/getVideoById/${videoId}`,
       method:'get'
     })
   },

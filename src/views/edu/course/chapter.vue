@@ -32,7 +32,7 @@
             <p>{{ video.title }}
 
               <span class="acts">
-                    <el-button style="" type="text" >编辑</el-button>
+                    <el-button type="text" @click="editVideo(video.id)">编辑</el-button>
                     <el-button type="text" @click="removeVideo(video.id)">删除</el-button>
               </span>
             </p>
@@ -121,22 +121,65 @@
     methods:{
 //=================================小节操作===================================================
       saveOrUpdateVideo(){
-        this.addEduvideo()
+        if(!this.video.id){
+          this.addEduvideo()
+        }else{
+          this.saveEditVideo()
+        }
+      },
+      //删除小节
+      removeVideo(id){
+        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          video.deleteVideo(id).then(response=>{
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            });
+            //刷新 展示
+            this.getChapterVideo()
+          })
+        })
+
       },
       //打开添加小节面板
       openVideo(chapterId){
         this.dialogVideoFormVisible=true
-//设置video属性
+      //设置video属性
         this.video.chapterId=chapterId
+        this.video.free=''
+        this.video.sort=''
+        this.video.title=''
       },
       addEduvideo(){
         this.video.courseId=this.courseId
         video.addVideo(this.video).then(response=>{
           this.dialogVideoFormVisible=false
-
           this.$message({
             type: 'success',
             message: '添加成功!'
+          });
+          //刷新 展示
+          this.getChapterVideo()
+        })
+      },
+      editVideo(id){
+       // this.dialogVideoFormVisible=true //显示弹框
+        video.getVideo(id).then(response=>{
+          this.video=response.data.eduvideo
+          this.dialogVideoFormVisible=true //显示弹框
+        })
+      },
+      saveEditVideo(){
+        video.updateVideo(this.video).then(response=>{
+          this.dialogVideoFormVisible=false //显示弹框
+          //提示
+          this.$message({
+            type: 'success',
+            message: '修改章节信息成功!'
           });
           //刷新 展示
           this.getChapterVideo()
