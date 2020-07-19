@@ -124,6 +124,23 @@
       resetData() {
         this.courseQuery={}
         this.getList()
+      },
+      //删除课程
+      removeDataById(id){
+        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(()=>{
+          console.log('确定'+id)
+          course.deleteCourse(id).then(request=>{
+            this.getList()
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            });
+          })
+        })
       }
     }
 

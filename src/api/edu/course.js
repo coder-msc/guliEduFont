@@ -60,6 +60,13 @@ export default{
       method:'post',
       data:courseQuery
     })
+  },
+  //删除课程
+  deleteCourse(courseId){
+    return request({
+      url:`/eduservice/educourse/deleteCourse/${courseId}`,
+      method:'delete'
+    })
   }
 
   }
