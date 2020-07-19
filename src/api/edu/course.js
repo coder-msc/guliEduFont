@@ -35,7 +35,31 @@ export default{
   getPublishCourseInfo(id){
     return request({
       url:`/eduservice/educourse/getPublishCourseInfo/${id}`,
-      method:'get',
+      method:'get'
     })
   },
+  //最终发布
+  PublishCourse(id){
+    return request({
+      url:`/eduservice/educourse/publishCourse/${id}`,
+      method:'post'
+    })
+  },
+  //课程列表信息
+  getlistCourse(){
+    return request({
+      url:`/eduservice/educourse`,
+      method:'get'
+    })
+  },
+  //显示课程列表，带有条件查询的分页
+  getCourselist(current,limit,courseQuery){
+    console.log('-------======')
+    return request({
+      url:`/eduservice/educourse/getCourseListCondition/${current}/${limit}`,
+      method:'post',
+      data:courseQuery
+    })
+  }
+
   }
