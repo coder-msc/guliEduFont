@@ -141,7 +141,26 @@
       this.getChapterVideo()
     },
     methods:{
-      //上传视频=============================
+ //===========================================上传视频=========================================================
+      //删除视频之前，先确认
+      beforeVodRemove(file,fileList){
+        return this.$confirm(`确认移除${file.name}`)
+      },
+      //删除视频
+      handleVodRemove(){
+        console.log('---+++====')
+        video.removeAlyyunVod(this.video.videoSourceId).then(response=>{
+            //提示
+            this.$message({
+            type: 'success',
+            message: '删除视频成功!'
+            });
+            //清空文件列表
+          this.fileList=[]
+          this.video.videoSourceId=''
+          this.video.videoOriginalName=''
+            })
+      },
       //上传视频成功调用的方法
       handleVodUploadSuccess(response, file, fileList) {
         //上传视频id赋值
@@ -187,6 +206,7 @@
         this.video.free=''
         this.video.sort=''
         this.video.title=''
+        this.fileList = []
       },
       addEduvideo(){
         this.video.courseId=this.courseId
