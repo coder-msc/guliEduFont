@@ -49,7 +49,7 @@ export const constantRouterMap = [
         name: 'EduteacherEdit',
         component: () => import('@/views/edu/teacher/save'),
         meta: { title: '编辑讲师', icon: 'tree' },
-        hidden:true
+        hidden: true
       }
     ]
   },
@@ -98,7 +98,7 @@ export const constantRouterMap = [
         name: 'EduCourseInfoEdit',
         component: () => import('@/views/edu/course/info'),
         meta: { title: '编辑课程基本信息', icon: 'tree' },
-        hidden:true
+        hidden: true
       },
       {
         path: 'chapter/:id',
@@ -117,7 +117,6 @@ export const constantRouterMap = [
     ]
   },
 
-
   {
     path: '/',
     component: Layout,
@@ -129,25 +128,24 @@ export const constantRouterMap = [
       component: () => import('@/views/dashboard/index')
     }]
   },
-
   {
-    path: '/example',
+    path: '/bolgs',
     component: Layout,
-    redirect: '/example/table',
-    name: 'Example',
-    meta: { title: 'Example', icon: 'example' },
+    redirect: '/blogs/list',
+    name: '博客管理',
+    meta: { title: '博客管理', icon: 'example' },
     children: [
       {
-        path: 'table',
-        name: 'Table',
-        component: () => import('@/views/table/index'),
-        meta: { title: 'Table', icon: 'table' }
+        path: 'list',
+        name: '博客列表',
+        component: () => import('@/views/blogs/list'),
+        meta: { title: '博客列表', icon: 'table' }
       },
       {
-        path: 'tree',
-        name: 'Tree',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'Tree', icon: 'tree' }
+        path: 'edit:id',
+        name: '博客添加',
+        component: () => import('@/views/blogs/edit'),
+        meta: { title: '博客添加', icon: 'tree' }
       }
     ]
   },
