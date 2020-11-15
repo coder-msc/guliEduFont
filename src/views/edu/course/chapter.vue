@@ -19,10 +19,10 @@
           {{ chapter.title }}
 
           <span class="acts">
-                    <el-button style="" type="text" @click="openVideo(chapter.id)">添加小节</el-button>
-                    <el-button style="" type="text" @click="openEditChatper(chapter.id)">编辑</el-button>
-                    <el-button type="text" @click="removeChapter(chapter.id)">删除</el-button>
-                </span>
+            <el-button style="" type="text" @click="openVideo(chapter.id)">添加小节</el-button>
+            <el-button style="" type="text" @click="openEditChatper(chapter.id)">编辑</el-button>
+            <el-button type="text" @click="removeChapter(chapter.id)">删除</el-button>
+          </span>
         </p>
         <!-- 小节 -->
         <ul class="chanpterList videoList">
@@ -32,8 +32,8 @@
             <p>{{ video.title }}
 
               <span class="acts">
-                    <el-button type="text" @click="editVideo(video.id)">编辑</el-button>
-                    <el-button type="text" @click="removeVideo(video.id)">删除</el-button>
+                <el-button type="text" @click="editVideo(video.id)">编辑</el-button>
+                <el-button type="text" @click="removeVideo(video.id)">删除</el-button>
               </span>
             </p>
           </li>
@@ -44,7 +44,6 @@
       <el-button @click="previous">上一步</el-button>
       <el-button :disabled="saveBtnDisabled" type="primary" @click="next">下一步</el-button>
     </div>
-
 
     <!-- 添加和修改章节表单 -->
     <el-dialog :visible.sync="dialogChapterFormVisible" title="添加章节">
@@ -108,227 +107,223 @@
   </div>
 </template>
 <script>
-  import chapter from '@/api/edu/chapter'
-  import  video from '@/api/edu/video'
-  export default {
-    data() {
-      return {
-        chapterVideo:[],
-        saveBtnDisabled:false,
-        courseId:'',
-        dialogChapterFormVisible:false, //章弹框
-        dialogVideoFormVisible:false,//小节弹框
-        chapter:{
-          title:'',
-          sort:''
-        },
-        video:{
-          title: '',
-          sort: 0,
-          free: 0,
-          videoSourceId: '',
-          videoOriginalName:''//视频名称
-        },
-        fileList: [],//上传文件列表
-        BASE_API: process.env.BASE_API // 接口API地址
+import chapter from '@/api/edu/chapter'
+import video from '@/api/edu/video'
+export default {
+  data() {
+    return {
+      chapterVideo: [],
+      saveBtnDisabled: false,
+      courseId: '',
+      dialogChapterFormVisible: false, // 章弹框
+      dialogVideoFormVisible: false, // 小节弹框
+      chapter: {
+        title: '',
+        sort: ''
+      },
+      video: {
+        title: '',
+        sort: 0,
+        free: 0,
+        videoSourceId: '',
+        videoOriginalName: ''// 视频名称
+      },
+      fileList: [], // 上传文件列表
+      BASE_API: process.env.BASE_API // 接口API地址
 
-      }
+    }
+  },
+  created() {
+    if (this.$route.params && this.$route.params.id) {
+      this.courseId = this.$route.params.id
+    }
+    this.getChapterVideo()
+  },
+  methods: {
+    // ===========================================上传视频=========================================================
+    // 删除视频之前，先确认
+    beforeVodRemove(file, fileList) {
+      return this.$confirm(`确认移除${file.name}`)
     },
-    created() {
-      if(this.$route.params && this.$route.params.id){
-        this.courseId=this.$route.params.id
-      }
-      this.getChapterVideo()
-    },
-    methods:{
- //===========================================上传视频=========================================================
-      //删除视频之前，先确认
-      beforeVodRemove(file,fileList){
-        return this.$confirm(`确认移除${file.name}`)
-      },
-      //删除视频
-      handleVodRemove(){
-        console.log('---+++====')
-        video.removeAlyyunVod(this.video.videoSourceId).then(response=>{
-            //提示
-            this.$message({
-            type: 'success',
-            message: '删除视频成功!'
-            });
-            //清空文件列表
-          this.fileList=[]
-          this.video.videoSourceId=''
-          this.video.videoOriginalName=''
-            })
-      },
-      //上传视频成功调用的方法
-      handleVodUploadSuccess(response, file, fileList) {
-        //上传视频id赋值
-        this.video.videoSourceId = response.data.videoId
-        //上传视频名称赋值
-        this.video.videoOriginalName = file.name
-      },
-      handleUploadExceed() {
-        this.$message.warning('想要重新上传视频，请先删除已上传的视频')
-      },
-
-//=================================小节操作===================================================
-      saveOrUpdateVideo(){
-        if(!this.video.id){
-          this.addEduvideo()
-        }else{
-          this.saveEditVideo()
-        }
-      },
-      //删除小节
-      removeVideo(id){
-        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          video.deleteVideo(id).then(response=>{
-            this.$message({
-              type: 'success',
-              message: '删除成功!'
-            });
-            //刷新 展示
-            this.getChapterVideo()
-          })
+    // 删除视频
+    handleVodRemove() {
+      console.log('---+++====')
+      video.removeAlyyunVod(this.video.videoSourceId).then(response => {
+        // 提示
+        this.$message({
+          type: 'success',
+          message: '删除视频成功!'
         })
-
-      },
-      //打开添加小节面板
-      openVideo(chapterId){
-        this.dialogVideoFormVisible=true
-      //设置video属性
-        this.video.chapterId=chapterId
-        this.video.free=''
-        this.video.sort=''
-        this.video.title=''
+        // 清空文件列表
         this.fileList = []
-      },
-      addEduvideo(){
-        this.video.courseId=this.courseId
-        video.addVideo(this.video).then(response=>{
-          this.dialogVideoFormVisible=false
-          this.$message({
-            type: 'success',
-            message: '添加成功!'
-          });
-          //刷新 展示
-          this.getChapterVideo()
-        })
-      },
-      editVideo(id){
-       // this.dialogVideoFormVisible=true //显示弹框
-        video.getVideo(id).then(response=>{
-          this.video=response.data.eduvideo
-          this.dialogVideoFormVisible=true //显示弹框
-        })
-      },
-      saveEditVideo(){
-        video.updateVideo(this.video).then(response=>{
-          this.dialogVideoFormVisible=false //显示弹框
-          //提示
-          this.$message({
-            type: 'success',
-            message: '修改章节信息成功!'
-          });
-          //刷新 展示
-          this.getChapterVideo()
-        })
-      },
+        this.video.videoSourceId = ''
+        this.video.videoOriginalName = ''
+      })
+    },
+    // 上传视频成功调用的方法
+    handleVodUploadSuccess(response, file, fileList) {
+      // 上传视频id赋值
+      this.video.videoSourceId = response.data.videoId
+      // 上传视频名称赋值
+      this.video.videoOriginalName = file.name
+    },
+    handleUploadExceed() {
+      this.$message.warning('想要重新上传视频，请先删除已上传的视频')
+    },
 
- //=================================章节操作===================================================
-
-      //删除章节
-      removeChapter(chapterId){
-        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          chapter.deleteChapter(chapterId).then(response=>{
-            this.$message({
-              type: 'success',
-              message: '删除成功!'
-            });
-            //刷新 展示
-            this.getChapterVideo()
-          })
-
-        })
-      },
-      //修改章节(查询)
-      openEditChatper(chapterId){
-        chapter.getChapter(chapterId).then(response=>{
-          this.chapter=response.data.chapter
-          this.dialogChapterFormVisible=true
-        })
-      },
-      //提交修改
-      updateChapter(){
-        this.chapter.courseId=this.courseId
-        chapter.updateChapter(this.chapter).then(response=>{
-          //关闭弹框
-          this.dialogChapterFormVisible=false
-          //提示
-          this.$message({
-            type: 'success',
-            message: '修改章节信息成功!'
-          });
-          //刷新 展示
-          this.getChapterVideo()
-        })
-      },
-      //添加章节
-      addChapter(){
-        this.chapter.courseId=this.courseId
-        chapter.addChapter(this.chapter).then(response=>{
-          //关闭弹框
-          this.dialogChapterFormVisible=false
-          //提示
-          this.$message({
-            type: 'success',
-            message: '添加章节信息成功!'
-          });
-          //刷新 展示
-          this.getChapterVideo()
-        })
-      },
-      //跟新或者添加
-      saveOrUpdate(){
-        if(!this.chapter.id){
-
-          this.addChapter()
-        }else{
-          this.updateChapter()
-        }
-
-      },
-        //弹框并清空表单
-      openChapterDialog(){
-        this.dialogChapterFormVisible=true
-        this.chapter.title=''
-        this.chapter.sort=0
-      },
-      //上一步
-      previous(){
-        this.$router.push({path:'/course/info/'+this.courseId})
-      },
-      //下一步
-      next(){
-        this.$router.push({path:'/course/publish/'+this.courseId})
-      },
-      //根据CourseID 查询章节小节
-      getChapterVideo(){
-        chapter.getAllChapterVideo(this.courseId).then(response=>{
-          this.chapterVideo=response.data.allChapterVideo
-        })
+    // =================================小节操作===================================================
+    saveOrUpdateVideo() {
+      if (!this.video.id) {
+        this.addEduvideo()
+      } else {
+        this.saveEditVideo()
       }
+    },
+    // 删除小节
+    removeVideo(id) {
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        video.deleteVideo(id).then(response => {
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          })
+          // 刷新 展示
+          this.getChapterVideo()
+        })
+      })
+    },
+    // 打开添加小节面板
+    openVideo(chapterId) {
+      this.dialogVideoFormVisible = true
+      // 设置video属性
+      this.video.chapterId = chapterId
+      this.video.free = ''
+      this.video.sort = ''
+      this.video.title = ''
+      this.fileList = []
+    },
+    addEduvideo() {
+      this.video.courseId = this.courseId
+      video.addVideo(this.video).then(response => {
+        this.dialogVideoFormVisible = false
+        this.$message({
+          type: 'success',
+          message: '添加成功!'
+        })
+        // 刷新 展示
+        this.getChapterVideo()
+      })
+    },
+    editVideo(id) {
+      // this.dialogVideoFormVisible=true //显示弹框
+      video.getVideo(id).then(response => {
+        this.video = response.data.eduvideo
+        this.dialogVideoFormVisible = true // 显示弹框
+      })
+    },
+    saveEditVideo() {
+      video.updateVideo(this.video).then(response => {
+        this.dialogVideoFormVisible = false // 显示弹框
+        // 提示
+        this.$message({
+          type: 'success',
+          message: '修改章节信息成功!'
+        })
+        // 刷新 展示
+        this.getChapterVideo()
+      })
+    },
+
+    // =================================章节操作===================================================
+
+    // 删除章节
+    removeChapter(chapterId) {
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        chapter.deleteChapter(chapterId).then(response => {
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          })
+          // 刷新 展示
+          this.getChapterVideo()
+        })
+      })
+    },
+    // 修改章节(查询)
+    openEditChatper(chapterId) {
+      chapter.getChapter(chapterId).then(response => {
+        this.chapter = response.data.chapter
+        this.dialogChapterFormVisible = true
+      })
+    },
+    // 提交修改
+    updateChapter() {
+      this.chapter.courseId = this.courseId
+      chapter.updateChapter(this.chapter).then(response => {
+        // 关闭弹框
+        this.dialogChapterFormVisible = false
+        // 提示
+        this.$message({
+          type: 'success',
+          message: '修改章节信息成功!'
+        })
+        // 刷新 展示
+        this.getChapterVideo()
+      })
+    },
+    // 添加章节
+    addChapter() {
+      this.chapter.courseId = this.courseId
+      chapter.addChapter(this.chapter).then(response => {
+        // 关闭弹框
+        this.dialogChapterFormVisible = false
+        // 提示
+        this.$message({
+          type: 'success',
+          message: '添加章节信息成功!'
+        })
+        // 刷新 展示
+        this.getChapterVideo()
+      })
+    },
+    // 跟新或者添加
+    saveOrUpdate() {
+      if (!this.chapter.id) {
+        this.addChapter()
+      } else {
+        this.updateChapter()
+      }
+    },
+    // 弹框并清空表单
+    openChapterDialog() {
+      this.dialogChapterFormVisible = true
+      this.chapter.title = ''
+      this.chapter.sort = 0
+    },
+    // 上一步
+    previous() {
+      this.$router.push({ path: '/course/info/' + this.courseId })
+    },
+    // 下一步
+    next() {
+      this.$router.push({ path: '/course/publish/' + this.courseId })
+    },
+    // 根据CourseID 查询章节小节
+    getChapterVideo() {
+      chapter.getAllChapterVideo(this.courseId).then(response => {
+        this.chapterVideo = response.data.allChapterVideo
+      })
     }
   }
+}
 </script>
 <style scoped>
   .chanpterList{

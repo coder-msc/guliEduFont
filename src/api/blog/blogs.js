@@ -2,6 +2,16 @@ import request from '@/utils/request'
 import id from 'element-ui/src/locale/lang/id'
 
 export default{
+
+  // 编辑博客
+  editBlog(ruleForm) {
+    return request({
+      url: '/blogservice/blogs/blog/edit',
+      method: 'post',
+      data: ruleForm
+    })
+  },
+
   // 1 添加课程信息
   addCourseInfo(courseInfo) {
     return request({

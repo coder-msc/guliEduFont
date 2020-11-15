@@ -9,8 +9,8 @@
 
       <el-form-item>
         <el-select v-model="courseQuery.status" clearable placeholder="课程状态">
-          <el-option :value='"Normal"' label='已发布'/>
-          <el-option :value='"Draft"' label='未发布'/>
+          <el-option :value="courseQuery.status" label="已发布"/>
+          <el-option :value="courseQuery.status" label="未发布"/>
         </el-select>
       </el-form-item>
 
@@ -44,7 +44,7 @@
       fit
       highlight-current-row>
 
-      <el-table-column label="序号"   width="70"   align="center">
+      <el-table-column label="序号" width="70" align="center">
         <template slot-scope="scope">
           {{ (page - 1) * limit + scope.$index + 1 }}
         </template>
@@ -90,59 +90,59 @@
   </div>
 </template>
 <script>
-  // 引入JS
-  import course from '@/api/edu/course'
-  //  写核心代码
-  export default {
-    data() { // 定义变量和初始值
-      return {
-        list: null, // 查询之后接口返回的集合
-        page: 1, // 当前页
-        limit: 5, // 每页显示的数量
-        total: 0, // 总记录数
-        courseQuery: {
-          // name:''
-        } // 条件封装对象
-      }
+// 引入JS
+import course from '@/api/edu/course'
+//  写核心代码
+export default {
+  data() { // 定义变量和初始值
+    return {
+      list: null, // 查询之后接口返回的集合
+      page: 1, // 当前页
+      limit: 5, // 每页显示的数量
+      total: 0, // 总记录数
+      courseQuery: {
+        // name:''
+      } // 条件封装对象
+    }
+  },
+  created() { // 在页面渲染之前执行，一般是调用Methods里定义的方法。
+    // 调用
+    this.getList()
+  },
+  methods: { // 创建具体的方法，调用teacher.js中定义的方法
+    getList(page = 1) {
+      this.page = page
+      course.getCourselist(this.page, this.limit, this.courseQuery)
+        .then(response => {
+          this.list = response.data.rows
+          this.total = response.data.total
+        }) // 请求成功
+        .catch(error => {
+          console.log(error)
+        }) // 请求失败
     },
-    created() { // 在页面渲染之前执行，一般是调用Methods里定义的方法。
-      // 调用
+    resetData() {
+      this.courseQuery = {}
       this.getList()
     },
-    methods: { // 创建具体的方法，调用teacher.js中定义的方法
-      getList(page=1) {
-        this.page=page
-        course.getCourselist(this.page,this.limit,this.courseQuery)
-          .then(response => {
-            this.list = response.data.rows
-            this.total=response.data.total
-          }) // 请求成功
-          .catch(error => {
-            console.log(error)
-          }) // 请求失败
-      },
-      resetData() {
-        this.courseQuery={}
-        this.getList()
-      },
-      //删除课程
-      removeDataById(id){
-        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(()=>{
-          console.log('确定'+id)
-          course.deleteCourse(id).then(request=>{
-            this.getList()
-            this.$message({
-              type: 'success',
-              message: '删除成功!'
-            });
+    // 删除课程
+    removeDataById(id) {
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        console.log('确定' + id)
+        course.deleteCourse(id).then(request => {
+          this.getList()
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
           })
         })
-      }
+      })
     }
-
   }
+
+}
 </script>
