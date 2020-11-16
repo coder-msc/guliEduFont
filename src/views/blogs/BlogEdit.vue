@@ -12,7 +12,13 @@
         </el-form-item>
 
         <el-form-item label="内容" prop="content">
-          <mavon-editor v-model="ruleForm.content"/>
+          <!--          <mavon-editor ref="md" v-model="ruleForm.content" @imgAdd="$imgAdd" @imgDel="$imgDel"/>-->
+          <mavon-editor
+            ref="md"
+            v-model ="ruleForm.content"
+            @imgAdd="$imgAdd"
+            @imgDel="$imgDel"
+          />
         </el-form-item>
 
         <el-form-item>
@@ -66,6 +72,27 @@ export default {
     }
   },
   methods: {
+    $imgAdd(pos, $file) {
+      // 第一步.将图片上传到服务器.
+      var formdata = new FormData()
+      console.log('-=============' + pos + '=======' + $file)
+      formdata.append('image', $file)
+      // this.img_file[pos] = $file
+      // eslint-disable-next-line no-undef
+      this.$axios({
+        url: '/api/edit/uploadimg',
+        method: 'post',
+        data: formdata,
+        headers: { 'Content-Type': 'multipart/form-data' }
+      }).then((response) => {
+        const _res = response.url
+        // 第二步.将返回的url替换到文本原位置![...](0) -> ![...](url)
+        this.$refs.md.$img2Url(pos, _res)
+      })
+    },
+    $imgDel(pos) {
+      delete this.img_file[pos]
+    },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
@@ -85,6 +112,7 @@ export default {
         }
       })
     },
+
     resetForm(formName) {
       this.$refs[formName].resetFields()
     }
