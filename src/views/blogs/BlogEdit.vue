@@ -34,6 +34,7 @@
 
 <script>
 import blogs from '@/api/blog/blogs'
+
 export default {
   data() {
     return {
@@ -75,20 +76,26 @@ export default {
     $imgAdd(pos, $file) {
       // 第一步.将图片上传到服务器.
       var formdata = new FormData()
-      console.log('-=============' + pos + '=======' + $file)
       formdata.append('image', $file)
+      blogs.uploadAddpicture(formdata).then(response => {
+        console.log('-=-=hello')
+      })
+
       // this.img_file[pos] = $file
       // eslint-disable-next-line no-undef
-      this.$axios({
-        url: '/api/edit/uploadimg',
-        method: 'post',
-        data: formdata,
-        headers: { 'Content-Type': 'multipart/form-data' }
-      }).then((response) => {
-        const _res = response.url
-        // 第二步.将返回的url替换到文本原位置![...](0) -> ![...](url)
-        this.$refs.md.$img2Url(pos, _res)
-      })
+      // axios({
+      //   url: '/bolg/url',
+      //   method: 'post',
+      //   data: formdata,
+      //   headers: { 'Content-Type': 'multipart/form-data' }
+      // })
+      //   .then(response => {
+      //     console.log('-=============' + response + '=======' + response.data)
+      //
+      //     const _res = response.url
+      //     // 第二步.将返回的url替换到文本原位置![...](0) -> ![...](url)
+      //     this.$refs.md.$img2Url(pos, _res)
+      //   })
     },
     $imgDel(pos) {
       delete this.img_file[pos]
