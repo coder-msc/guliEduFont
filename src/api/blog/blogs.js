@@ -12,6 +12,17 @@ export default{
     })
   },
 
+  // 获取图片地址
+  uploadAddpicture(formdata) {
+    return request({
+      url: '/blogservice/blogs/bolg/url',
+      method: 'post',
+      data: formdata,
+      headers: { 'Content-Type': 'multipart/form-data' }
+    })
+  },
+  // 上传图片方法
+
   // 1 添加课程信息
   addCourseInfo(courseInfo) {
     return request({

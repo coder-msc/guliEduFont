@@ -77,10 +77,10 @@ export default {
       // 第一步.将图片上传到服务器.
       var formdata = new FormData()
       formdata.append('image', $file)
-      blogs.uploadAddpicture(formdata).then(response => {
-        console.log('-=-=hello')
+      blogs.uploadAddpicture(formdata).then((response) => {
+        // console.log('-=-=hello'+response)
+        this.$refs.md.$img2Url(pos, response.data.url)
       })
-
       // this.img_file[pos] = $file
       // eslint-disable-next-line no-undef
       // axios({
