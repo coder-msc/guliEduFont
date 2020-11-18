@@ -44,7 +44,7 @@
       fit
       highlight-current-row>
 
-      <el-table-column label="序号"   width="70"   align="center">
+      <el-table-column label="序号" width="70" align="center">
         <template slot-scope="scope">
           {{ (page - 1) * limit + scope.$index + 1 }}
         </template>
@@ -98,7 +98,7 @@ export default {
       limit: 5, // 每页显示的数量
       total: 0, // 总记录数
       teacherQuery: {
-       // name:''
+        // name:''
       } // 条件封装对象
     }
   },
@@ -107,8 +107,8 @@ export default {
     this.getList()
   },
   methods: { // 创建具体的方法，调用teacher.js中定义的方法
-    getList(page=1) {
-      this.page=page   //设置方法传入的页码
+    getList(page = 1) {
+      this.page = page // 设置方法传入的页码
       teacher.getTeacherList(this.page, this.limit, this.teacherQuery)
         .then(response => {
           this.list = response.data.rows
@@ -121,27 +121,26 @@ export default {
         }) // 请求失败
     },
     resetData() {
-      this.teacherQuery={}
+      this.teacherQuery = {}
       this.getList()
     },
-    removeDataById(id){
+    removeDataById(id) {
       this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(() => {  //点确认执行 then（）方法
-              teacher.deleteTeacherByid(id)
-                .then(response=>{
-                   this.getList()
-                }).
-              catch(error=>{
-              })
-          this.$message({
+      }).then(() => { // 点确认执行 then（）方法
+        teacher.deleteTeacherByid(id)
+          .then(response => {
+            this.getList()
+          })
+          .catch(error => {
+          })
+        this.$message({
           type: 'success',
           message: '删除成功!'
-        });
+        })
       })
-
     }
   }
 

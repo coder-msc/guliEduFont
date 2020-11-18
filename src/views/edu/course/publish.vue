@@ -28,58 +28,57 @@
   </div>
 </template>
 
-
 <script>
 import course from '@/api/edu/course'
-  export default {
-    data() {
-      return {
-        saveBtnDisabled: false ,// 保存按钮是否禁用
-        courseId:'',
-        coursePublish:{}
-      }
+export default {
+  data() {
+    return {
+      saveBtnDisabled: false, // 保存按钮是否禁用
+      courseId: '',
+      coursePublish: {}
+    }
+  },
+
+  created() {
+    if (this.$route.params && this.$route.params.id) {
+      this.courseId = this.$route.params.id
+      this.getPublishCourse()
+    }
+    console.log('publish created')
+  },
+
+  methods: {
+
+    getPublishCourse() {
+      course.getPublishCourseInfo(this.courseId).then(response => {
+        this.coursePublish = response.data.publishCourse
+      })
+    },
+    previous() {
+      console.log('previous')
+      this.$router.push({ path: '/course/chapter/' + this.courseId })
     },
 
-    created() {
-      if(this.$route.params && this.$route.params.id){
-        this.courseId=this.$route.params.id
-        this.getPublishCourse()
-      }
-      console.log('publish created')
-    },
-
-    methods: {
-
-      getPublishCourse(){
-        course.getPublishCourseInfo(this.courseId).then(response=>{
-          this.coursePublish=response.data.publishCourse
-        })
-      },
-      previous() {
-        console.log('previous')
-        this.$router.push({ path: '/course/chapter/'+this.courseId })
-      },
-
-      publish() {
-        this.$confirm('是否发布课程, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          //最终发布
-          course.PublishCourse(this.courseId).then(response=>{
-            //提是信息
-            this.$message({
-              type:'success',
-              message:'课程发布成功'
-            })
-            this.$router.push({ path: '/course/list' })
+    publish() {
+      this.$confirm('是否发布课程, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        // 最终发布
+        course.PublishCourse(this.courseId).then(response => {
+          // 提是信息
+          this.$message({
+            type: 'success',
+            message: '课程发布成功'
           })
+          this.$router.push({ path: '/course/list' })
         })
-        console.log('publish')
-      }
+      })
+      console.log('publish')
     }
   }
+}
 </script>
 
 <style scoped>

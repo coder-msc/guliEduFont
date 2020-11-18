@@ -105,11 +105,14 @@ export default {
         if (valid) {
           blogs.editBlog(this.ruleForm)
             .then(res => {
+              // this.$router.push({ path: '/course/list' })
+              this.$router.push({ path: '/blogs/list' })
               console.log(res)
               alert('操作成功', '提示', {
                 confirmButtonText: '确定',
                 callback: action => {
                 // _this.$router.push('/blogs')
+                  // this.$router.push({ path: '/blogs/BlogEdit' })
                 }
               })
             })
@@ -121,7 +124,9 @@ export default {
     },
 
     resetForm(formName) {
-      this.$refs[formName].resetFields()
+      // this.$router.push({ path: '/subject/list' })
+      this.$router.push({ path: '/blogs/Blogs' })
+      // this.$refs[formName].resetFields()
     }
   }
 }

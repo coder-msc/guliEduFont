@@ -1,31 +1,42 @@
 <template>
   <div class="mcontaner">
-    <Header></Header>
-
     <div class="block">
       <el-timeline>
 
-        <el-timeline-item :timestamp="blog.created" placement="top" v-for="blog in blogs">
+        <el-timeline-item v-for="blog in blogs" :timestamp="blog.created" placement="top">
           <el-card>
             <h4>
-              <router-link :to="{name: 'BlogDetail', params: {blogId: blog.id}}">
-                {{blog.title}}
+              <!--      this.$router.push({ path: '/blogs/Blogs' })
+-->
+              <router-link :to="'/blogs/Blogs'">
+                <!--              <router-link :to="{name: '/blogs/Blogs', params: {blogId: blog.id}}">-->
+                {{ blog.title }}
               </router-link>
             </h4>
-            <p>{{blog.description}}</p>
+            <p>{{ blog.description }}</p>
           </el-card>
         </el-timeline-item>
 
       </el-timeline>
 
-      <el-pagination class="mpage"
-                     background
-                     layout="prev, pager, next"
-                     :current-page="currentPage"
-                     :page-size="pageSize"
-                     :total="total"
-                     @current-change=page>
-      </el-pagination>
+      <!-- 分页 -->
+      <el-pagination
+        :current-page="page"
+        :page-size="limit"
+        :total="total"
+        class="mpage"
+        style="padding: 30px 0; text-align: center;"
+        layout="total, prev, pager, next, jumper"
+        @current-change="getAllBlogs"
+      />
+      <!--      <el-pagination-->
+      <!--        :current-page="currentPage"-->
+      <!--        :page-size="pageSize"-->
+      <!--        :total="total"-->
+      <!--        class="mpage"-->
+      <!--        background-->
+      <!--        layout="prev, pager, next"-->
+      <!--        @current-change="getAllBlogs(currentPage)"/>-->
 
     </div>
 
@@ -33,36 +44,34 @@
 </template>
 
 <script>
-  import Header from "../components/Header";
+import blogs from '@/api/blog/blogs'
 
-  export default {
-    name: "Blogs.vue",
-    components: {Header},
-    data() {
-      return {
-        blogs: {},
-        currentPage: 1,
-        total: 0,
-        pageSize: 5
-      }
-    },
-    methods: {
-      page(currentPage) {
-        const _this = this
-        _this.$axios.get("/blogs?currentPage=" + currentPage).then(res => {
-          console.log(res)
-          _this.blogs = res.data.data.records
-          _this.currentPage = res.data.data.current
-          _this.total = res.data.data.total
-          _this.pageSize = res.data.data.size
+export default {
+  data() {
+    return {
+      blogs: {},
+      currentPage: 1,
+      total: 0,
+      pageSize: 5
+    }
+  },
+  created() {
+    // this.page(1)
+    this.getAllBlogs(1)
+  },
 
-        })
-      }
-    },
-    created() {
-      this.page(1)
+  methods: {
+    getAllBlogs(currentPage) {
+      blogs.showAllBlogs(currentPage).then(response => {
+        console.log('-==============---' + response.data.pageData)
+        this.blogs = response.data.pageData.records
+        this.currentPage = response.data.pageData.current
+        this.total = response.data.pageData.total
+        this.pageSize = response.data.pageData.size
+      })
     }
   }
+}
 </script>
 
 <style scoped>

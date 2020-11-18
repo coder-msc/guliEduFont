@@ -14,12 +14,12 @@ import Layout from '../views/layout/Layout'
 
 /**
 * hidden: true                   if `hidden:true` will not show in the sidebar(default is false)
-* alwaysShow: true               if set true, will always show the root menu, whatever its child routes length
-*                                if not set alwaysShow, only more than one route under the children
-*                                it will becomes nested mode, otherwise not show the root menu
-* redirect: noredirect           if `redirect:noredirect` will no redirect in the breadcrumb
-* name:'router-name'             the name is used by <keep-alive> (must set!!!)
-* meta : {
+ * alwaysShow: true               if set true, will always show the root menu, whatever its child routes length
+ *                                if not set alwaysShow, only more than one route under the children
+ *                                it will becomes nested mode, otherwise not show the root menu
+ * redirect: noredirect           if `redirect:noredirect` will no redirect in the breadcrumb
+ * name:'router-name'             the name is used by <keep-alive> (must set!!!)
+ * meta : {
     title: 'title'               the name show in submenu and breadcrumb (recommend set)
     icon: 'svg-name'             the icon show in the sidebar,
   }
@@ -132,16 +132,16 @@ export const constantRouterMap = [
     }]
   },
   {
-    path: '/bolgs',
+    path: '/blogs',
     component: Layout,
     redirect: '/blogs/list',
     name: '博客管理',
     meta: { title: '博客管理', icon: 'example' },
     children: [
       {
-        path: 'list',
+        path: 'Blogs',
         name: '博客列表',
-        component: () => import('@/views/blogs/list'),
+        component: () => import('@/views/blogs/Blogs'),
         meta: { title: '博客列表', icon: 'table' }
       },
       {
@@ -149,6 +149,12 @@ export const constantRouterMap = [
         name: '博客添加',
         component: () => import('@/views/blogs/BlogEdit'),
         meta: { title: '博客添加', icon: 'tree' }
+      },
+      {
+        path: 'BlogDetail',
+        name: '博客详情',
+        component: () => import('@/views/blogs/BlogDetail'),
+        meta: { title: '博客详情', icon: 'table' }
       }
     ]
   },
