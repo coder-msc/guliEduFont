@@ -6,13 +6,11 @@
         <el-timeline-item v-for="blog in blogs" :timestamp="blog.created" placement="top">
           <el-card>
             <h4>
-              <!--      this.$router.push({ path: '/blogs/Blogs' })
--->
-              <router-link :to="'/blogs/Blogs'">
-                <!--              <router-link :to="{name: '/blogs/Blogs', params: {blogId: blog.id}}">-->
-                {{ blog.title }}
-              </router-link>
-            </h4>
+
+              {{ blog.title }}
+              <!--              </router-link>-->
+            </h4>   <el-button type="primary" @click="seeBlogDetail(blog.id)" >查看详情</el-button>
+            <el-button type="primary" @click="seeBlogDetail(blog.id)" >编辑</el-button><el-button type="primary" @click="seeBlogDetail(blog.id)" >删除</el-button>
             <p>{{ blog.description }}</p>
           </el-card>
         </el-timeline-item>
@@ -61,6 +59,7 @@ export default {
   },
 
   methods: {
+    // 显示所有博客列表
     getAllBlogs(currentPage) {
       blogs.showAllBlogs(currentPage).then(response => {
         console.log('-==============---' + response.data.pageData)
@@ -69,6 +68,11 @@ export default {
         this.total = response.data.pageData.total
         this.pageSize = response.data.pageData.size
       })
+    },
+    // 查看博客详情
+    seeBlogDetail(blogId) {
+      this.$router.push({ path: `/blogs/BlogDetail/${blogId}` })
+      console.log(blogId + '------------')
     }
   }
 }

@@ -112,7 +112,7 @@ export default {
                 confirmButtonText: '确定',
                 callback: action => {
                 // _this.$router.push('/blogs')
-                  // this.$router.push({ path: '/blogs/BlogEdit' })
+                  this.$router.push({ path: '/blogs/Blogs' })
                 }
               })
             })
@@ -125,6 +125,7 @@ export default {
 
     resetForm(formName) {
       // this.$router.push({ path: '/subject/list' })
+      // this.$router.push({ path: '/blogs/Blogs' })
       this.$router.push({ path: '/blogs/Blogs' })
       // this.$refs[formName].resetFields()
     }

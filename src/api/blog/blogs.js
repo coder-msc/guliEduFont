@@ -28,5 +28,12 @@ export default{
       url: '/blogservice/blogs/blogs',
       method: 'get'
     })
+  },
+  // 查看博客详情
+  showBlogDetail(blogId) {
+    return request({
+      url: `/blogservice/blogs/blog/${blogId}`,
+      method: 'get'
+    })
   }
 }

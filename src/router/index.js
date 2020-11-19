@@ -151,10 +151,11 @@ export const constantRouterMap = [
         meta: { title: '博客添加', icon: 'tree' }
       },
       {
-        path: 'BlogDetail',
+        path: 'BlogDetail/:blogId',
         name: '博客详情',
         component: () => import('@/views/blogs/BlogDetail'),
-        meta: { title: '博客详情', icon: 'table' }
+        meta: { title: '博客详情', icon: 'table' },
+        hidden: true
       }
     ]
   },

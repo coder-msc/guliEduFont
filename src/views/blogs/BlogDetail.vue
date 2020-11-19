@@ -18,6 +18,8 @@
 <script>
 import 'github-markdown-css'
 import 'mavon-editor/dist/css/index.css'
+import blogs from '@/api/blog/blogs'
+
 export default {
   data() {
     return {
@@ -30,21 +32,23 @@ export default {
     }
   },
   created() {
+    // 进入页面之前就调用方法 查询出博客详细
     const blogId = this.$route.params.blogId
-    console.log(blogId)
-    const _this = this
-    this.$axios.get('/blog/' + blogId).then(res => {
-      const blog = res.data.data
-      _this.blog.id = blog.id
-      _this.blog.title = blog.title
-
-      var MardownIt = require('markdown-it')
-      var md = new MardownIt()
-
-      var result = md.render(blog.content)
-      _this.blog.content = result
-      _this.ownBlog = (blog.userId === _this.$store.getters.getUser.id)
-    })
+    // console.log(blogId + 'blgogo98345347589')
+    this.showBlogDetail(blogId)
+  },
+  methods: {
+    showBlogDetail(blogId) {
+      blogs.showBlogDetail(blogId).then(request => {
+        const blog = request.data.data
+        this.blog.id = blog.id
+        this.blog.title = blog.title
+        var MardownIt = require('markdown-it')
+        var md = new MardownIt()
+        var result = md.render(blog.content)
+        this.blog.content = result
+      })
+    }
   }
 }
 </script>
