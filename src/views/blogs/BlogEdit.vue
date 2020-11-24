@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="m-content">
+    <div class="app-container">
 
       <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="100px" class="demo-ruleForm">
         <el-form-item label="标题" prop="title">
