@@ -11,10 +11,39 @@
           <el-input v-model="ruleForm.description" type="textarea"/>
         </el-form-item>
 
+        <!-- 讲师头像 -->
+        <el-form-item label="博客头像">
+
+          <!-- 头衔缩略图 -->
+          <pan-thumb :image="ruleForm.blog_avatar"/>
+          <!-- 文件上传按钮 -->
+          <el-button type="primary" icon="el-icon-upload" @click="imagecropperShow=true">更换头像
+          </el-button>
+
+          <!--
+      v-show：是否显示上传组件
+      :key：类似于id，如果一个页面多个图片上传控件，可以做区分
+      :url：后台上传的url地址
+      @close：关闭上传组件
+      @crop-upload-success：上传成功后的回调
+        <input type="file" name="file"/>
+      -->
+          <image-cropper
+            v-show="imagecropperShow"
+            :width="300"
+            :height="300"
+            :key="imagecropperKey"
+            :url="BASE_API+'/eduoss/fileoss'"
+            field="file"
+            @close="close"
+            @crop-upload-success="cropSuccess"/>
+        </el-form-item>
+
         <el-form-item label="内容" prop="content">
           <!--          <mavon-editor ref="md" v-model="ruleForm.content" @imgAdd="$imgAdd" @imgDel="$imgDel"/>-->
           <mavon-editor
             ref="md"
+            :ishljs = "true"
             v-model ="ruleForm.content"
             @imgAdd="$imgAdd"
             @imgDel="$imgDel"
@@ -34,16 +63,26 @@
 
 <script>
 import blogs from '@/api/blog/blogs'
+import ImageCropper from '@/components/ImageCropper'
+import PanThumb from '@/components/PanThumb'
 
 export default {
+  components: { ImageCropper, PanThumb },
+
   data() {
     return {
       ruleForm: {
         id: '',
         title: '',
+        blog_avatar: '',
         description: '',
         content: ''
       },
+      // 上传弹框组件是否显示
+      imagecropperShow: false,
+      imagecropperKey: 0, // 上传组件key值
+      BASE_API: process.env.BASE_API, // 获取dev.env.js里面地址
+      saveBtnDisabled: false, // 保存按钮是否禁用,
       rules: {
         title: [
           { required: true, message: '请输入标题', trigger: 'blur' },
@@ -73,6 +112,17 @@ export default {
     }
   },
   methods: {
+    cropSuccess(data) {
+      this.ruleForm.blog_avatar = "'https://edu-0110.oss-cn-beijing.aliyuncs.com/2020/07/076572ea3d1e964d01ab36e82e0766b99efile.png'"
+      this.imagecropperShow = false
+      // 上传组件初始化
+      this.imagecropperKey = this.imagecropperKey + 1
+    },
+    close() {
+      this.imagecropperShow = false
+      this.imagecropperKey = this.imagecropperKey + 1
+    },
+
     $imgAdd(pos, $file) {
       // 第一步.将图片上传到服务器.
       var formdata = new FormData()

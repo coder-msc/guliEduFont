@@ -16,8 +16,10 @@
 </template>
 
 <script>
-import 'github-markdown-css'
+// import 'github-markdown-css'
 import 'mavon-editor/dist/css/index.css'
+import 'github-markdown-css/github-markdown.css' // 然后添加样式markdown-body
+
 import blogs from '@/api/blog/blogs'
 
 export default {
