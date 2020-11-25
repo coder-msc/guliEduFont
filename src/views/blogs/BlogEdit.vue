@@ -33,7 +33,7 @@
             :width="300"
             :height="300"
             :key="imagecropperKey"
-            :url="BASE_API+'/eduoss/fileoss'"
+            :url="BASE_API+'/blogservice/blogs/bolg/url'"
             field="file"
             @close="close"
             @crop-upload-success="cropSuccess"/>
@@ -113,7 +113,7 @@ export default {
   },
   methods: {
     cropSuccess(data) {
-      this.ruleForm.blog_avatar = "'https://edu-0110.oss-cn-beijing.aliyuncs.com/2020/07/076572ea3d1e964d01ab36e82e0766b99efile.png'"
+      this.ruleForm.blog_avatar = data.url
       this.imagecropperShow = false
       // 上传组件初始化
       this.imagecropperKey = this.imagecropperKey + 1
