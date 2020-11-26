@@ -15,7 +15,7 @@ export default{
   // 获取图片地址
   uploadAddpicture(formdata) {
     return request({
-      url: '/blogservice/blogs/bolg/url',
+      url: '/blogservice/blogs/bolg/imgurl',
       method: 'post',
       data: formdata,
       headers: { 'Content-Type': 'multipart/form-data' }

@@ -15,7 +15,7 @@
         <el-form-item label="博客头像">
 
           <!-- 头衔缩略图 -->
-          <pan-thumb :image="ruleForm.blog_avatar"/>
+          <pan-thumb :image="ruleForm.blogAvatar"/>
           <!-- 文件上传按钮 -->
           <el-button type="primary" icon="el-icon-upload" @click="imagecropperShow=true">更换头像
           </el-button>
@@ -74,7 +74,7 @@ export default {
       ruleForm: {
         id: '',
         title: '',
-        blog_avatar: '',
+        blogAvatar: '',
         description: '',
         content: ''
       },
@@ -113,7 +113,7 @@ export default {
   },
   methods: {
     cropSuccess(data) {
-      this.ruleForm.blog_avatar = data.url
+      this.ruleForm.blogAvatar = data.url
       this.imagecropperShow = false
       // 上传组件初始化
       this.imagecropperKey = this.imagecropperKey + 1
@@ -153,10 +153,11 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          console.log(this.ruleForm)
           blogs.editBlog(this.ruleForm)
             .then(res => {
               // this.$router.push({ path: '/course/list' })
-              this.$router.push({ path: '/blogs/list' })
+              this.$router.push({ path: '/blogs/Blogs' })
               console.log(res)
               alert('操作成功', '提示', {
                 confirmButtonText: '确定',
