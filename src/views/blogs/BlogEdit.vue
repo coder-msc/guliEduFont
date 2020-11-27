@@ -65,6 +65,8 @@
 import blogs from '@/api/blog/blogs'
 import ImageCropper from '@/components/ImageCropper'
 import PanThumb from '@/components/PanThumb'
+// import axios from 'axios'
+// axios.defaults.baseURL = 'http://127.0.0.1:9001'
 
 export default {
   components: { ImageCropper, PanThumb },
@@ -122,7 +124,29 @@ export default {
       this.imagecropperShow = false
       this.imagecropperKey = this.imagecropperKey + 1
     },
-
+    // $imgAdd(pos, $file) {
+    //   // 第一步.将图片上传到服务器.
+    //   var formdata = new FormData()
+    //   formdata.append('image', $file)
+    //   // blogs.uploadAddpicture(formdata).then((response) => {
+    //   //   // console.log('-=-=hello'+response)
+    //   //   this.$refs.md.$img2Url(pos, response.data.url)
+    //   // })
+    //   axios({
+    //     url: '/eduoss/fileoss',
+    //     method: 'post',
+    //     data: formdata,
+    //     headers: { 'Content-Type': 'multipart/form-data' }
+    //   })
+    //     .then(response => {
+    //       console.log('-=============' + response + '=======' + response.data)
+    //
+    //       const _res = response.url
+    //       // 第二步.将返回的url替换到文本原位置![...](0) -> ![...](url)
+    //       this.$refs.md.$img2Url(pos, _res)
+    //     })
+    // },
+    // 备份 好使
     $imgAdd(pos, $file) {
       // 第一步.将图片上传到服务器.
       var formdata = new FormData()
@@ -131,21 +155,6 @@ export default {
         // console.log('-=-=hello'+response)
         this.$refs.md.$img2Url(pos, response.data.url)
       })
-      // this.img_file[pos] = $file
-      // eslint-disable-next-line no-undef
-      // axios({
-      //   url: '/bolg/url',
-      //   method: 'post',
-      //   data: formdata,
-      //   headers: { 'Content-Type': 'multipart/form-data' }
-      // })
-      //   .then(response => {
-      //     console.log('-=============' + response + '=======' + response.data)
-      //
-      //     const _res = response.url
-      //     // 第二步.将返回的url替换到文本原位置![...](0) -> ![...](url)
-      //     this.$refs.md.$img2Url(pos, _res)
-      //   })
     },
     $imgDel(pos) {
       delete this.img_file[pos]
