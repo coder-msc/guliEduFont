@@ -1,91 +1,49 @@
-## 第一次提交代码
+### index 的BASE_URL 报错
 
+```$xslt
+ -- 备份留存
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css">
 
-# vue-admin-template
+    <title>vue-admin-template</title>
+    <style>
+      #github svg {
+        transition: all 1s;
+        fill: #222;
+        color: #fff;
+        position: absolute;
+        top: 0;
+        right: 0;
+        border: 0;
+        width: 80px;
+        height: 80px;
+      }
+      #github:hover svg {
+        width: 160px;
+        height: 160px;
+      }
+    </style>
+  </head>
+  <body>
+  <script src=<%= BASE_URL %>/tinymce4.7.5/tinymce.min.js></script>
+  <script src=<%= BASE_URL %>/tinymce4.7.5/langs/zh_CN.js></script>
 
-> A minimal vue admin template with Element UI & axios & iconfont & permission control & lint
+  <a id="github" href="https://github.com/stevenjoezhang/live2d-widget" target="_blank" title="Visit the open-source code on GitHub!">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+      <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+      <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" class="octo-arm"></path>
+      <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path>
+    </svg>
+  </a>
+  <script src="../live2d/autoload.js"></script>
 
-**Live demo:** http://panjiachen.github.io/vue-admin-template
-
-[中文文档](https://github.com/PanJiaChen/vue-admin-template/blob/master/README-zh.md)
-
-## Build Setup
-
-```bash
-# Clone project
-git clone https://github.com/PanJiaChen/vue-admin-template.git
-
-# Install dependencies
-npm install
-
-# Serve with hot reload at localhost:9528
-npm run dev
-
-# Build for production with minification
-npm run build
-
-# Build for production and view the bundle analyzer report
-npm run build --report
-```
-
-## Demo
-
-![demo](https://github.com/PanJiaChen/PanJiaChen.github.io/blob/master/images/demo.gif)
-
-## Extra
-
-If you want router permission && generate menu by user roles , you can use this branch [permission-control](https://github.com/PanJiaChen/vue-admin-template/tree/permission-control)
-
-This project is based on `webpack4` development. If you want to use `webpack3` development, please use this branch [webpack3](https://github.com/PanJiaChen/vue-admin-template/tree/webpack3)
-
-For `typescript` version, you can use [vue-typescript-admin-template](https://github.com/Armour/vue-typescript-admin-template) (Credits: [@Armour](https://github.com/Armour))
-
-## Related Project
-
-[vue-element-admin](https://github.com/PanJiaChen/vue-element-admin)
-
-[electron-vue-admin](https://github.com/PanJiaChen/electron-vue-admin)
-
-[vue-typescript-admin-template](https://github.com/Armour/vue-typescript-admin-template)
-
-### Element-Ui using cdn tutorial
-
-First find `index.html`([root directory](https://github.com/PanJiaChen/vue-admin-template/blob/element-ui-cdn/index.html))
-
-Import css and js of `Element`, and then import vue. Because `Element` is vue-dependent, vue must be import before it.
-
-Then find [webpack.base.conf.js](https://github.com/PanJiaChen/vue-admin-template/blob/element-ui-cdn/build/webpack.base.conf.js)
-Add `externals` to make webpack not package vue and element.
+  <div id="app"></div>
+    <!-- built files will be auto injected -->
+  </body>
+</html>
 
 ```
-externals: {
-  vue: 'Vue',
-  'element-ui':'ELEMENT'
-}
-```
-
-Finally there is a small detail to pay attention to that if you import vue in global, you don't need to manually `Vue.use(Vuex)`, it will be automatically mounted, see
-[issue](https://github.com/vuejs/vuex/issues/731)
-
-And you can use `npm run build --report` to see the effect
-
-Pictured:
-![demo](https://panjiachen.github.io/images/element-cdn.png)
-
-**[Detailed code](https://github.com/PanJiaChen/vue-admin-template/commit/746aff560932704ae821f82f10b8b2a9681d5177)**
-
-**[Branch](https://github.com/PanJiaChen/vue-admin-template/tree/element-ui-cdn)**
-
-## Browsers support
-
-Modern browsers and Internet Explorer 10+.
-
-| [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/edge/edge_48x48.png" alt="IE / Edge" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>IE / Edge | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png" alt="Firefox" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Firefox | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png" alt="Chrome" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Chrome | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari/safari_48x48.png" alt="Safari" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Safari |
-| --------- | --------- | --------- | --------- |
-| IE10, IE11, Edge| last 2 versions| last 2 versions| last 2 versions
-
-## License
-
-[MIT](https://github.com/PanJiaChen/vue-admin-template/blob/master/LICENSE) license.
-
-Copyright (c) 2017-present PanJiaChen

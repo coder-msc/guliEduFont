@@ -11,7 +11,6 @@ export default{
       data: ruleForm
     })
   },
-
   // 获取图片地址
   uploadAddpicture(formdata) {
     return request({
