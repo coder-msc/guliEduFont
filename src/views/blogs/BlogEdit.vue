@@ -34,7 +34,7 @@
             :height="300"
             :key="imagecropperKey"
             :url="BASE_API+'/blogservice/blogs/bolg/url'"
-            field="file"
+            field="image"
             @close="close"
             @crop-upload-success="cropSuccess"/>
         </el-form-item>
